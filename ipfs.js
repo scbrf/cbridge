@@ -27,7 +27,15 @@ class IPFS {
   }
 
   async publish(key, cid) {
-    return this.runIPFSCmd("name", "publish", `--key=${key}`, `/ipfs/${cid}`);
+    log.info(`publish ${cid} to ${key}...`);
+    return this.runIPFSCmd(
+      "name",
+      "publish",
+      `--key=${key}`,
+      `/ipfs/${cid}`
+    ).then(() => {
+      log.info(`publish ${cid} to ${key} done!`);
+    });
   }
 
   async runIPFSCmd(...args) {
