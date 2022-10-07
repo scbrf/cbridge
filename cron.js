@@ -37,7 +37,7 @@ async function updateIPNS(p) {
     const comments = await require("axios").get(
       `${COMMENT_BASE}/${p.key}/${article.id}`
     );
-    require("fs").writeFileSync(commentsPath, JSON.stringify(comments));
+    require("fs").writeFileSync(commentsPath, JSON.stringify(comments.data));
   }
   const cid = await require("./ipfs").addDirectory(planetRoot);
   require("./ipfs").publish(p.key, cid);
