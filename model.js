@@ -9,14 +9,24 @@ class Storage {
       this.data = JSON.parse(
         require("fs").readFileSync(this.jsonPath).toString()
       );
+      this.assignDelay();
     } else {
       this.data = {
         planets: [],
       };
     }
   }
+
+  //尽可能将请求平均分配以分散服务器压力
+  assignDelay() {
+    this.data.planets.forEach((p, i) => {
+      p.delaySeed = (9999 * i) / this.data.planets.length;
+    });
+  }
+
   add(planet) {
     this.data.planets.push(planet);
+    this.assignDelay();
     require("fs").writeFileSync(this.jsonPath, JSON.stringify(this.data));
   }
 }

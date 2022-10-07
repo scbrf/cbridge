@@ -4,6 +4,8 @@ new CronJob(
   async function () {
     const data = require("./model").data;
     data.planets.forEach(async (planet) => {
+      //为了将请求平均分配在10分钟的时间段内增加一些延时
+      await new Promise((resolve) => setTimeout(resolve, planet.delaySeed));
       updateIPNS(planet);
     });
   },
