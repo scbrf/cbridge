@@ -1,0 +1,6 @@
+# comment bridge
+
+这个模块实现了一个针对Planet定制的中心化评论系统到分布式文件系统的桥梁
+
+任何人都可以通过开放的api登记一个ipns，得到一个评论的ipns，cbridge定期以Planet格式请求这个ipns对应的帖子格式，然后到中心化的评论系统获取帖子对应的评论，将其内容加入ipfs，客户端则可以通过ipns/articleid.json的方式获取到最新的评论内容。
+
