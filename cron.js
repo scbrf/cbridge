@@ -1,6 +1,6 @@
 var CronJob = require("cron").CronJob;
 new CronJob(
-  "1 */10 * * * *",
+  "1 */6 * * * *",
   async function () {
     const data = require("./model").data;
     data.planets.forEach(async (planet) => {
