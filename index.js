@@ -34,7 +34,10 @@ async function main() {
     const { ipns } = ctx.request.query;
     if (!ipns) return ctx.status(404);
     const planet = await require("./ipfs").getPlanet(ipns);
-    if (!planet.articles) return ctx.status(403);
+    if (!planet || !planet.articles) {
+      log.error("fail to fetch planet.json");
+      return ctx.status(403);
+    }
     const result = await require("./ipfs").generateKey(ipns);
     require("./model").add({ key: ipns });
     ctx.body = { ipns: result };

@@ -12,10 +12,14 @@ class IPFS {
   }
 
   async getPlanet(ipns) {
-    const rsp = await require("axios").get(
-      `${this.Gateway}/ipns/${ipns}/planet.json`
-    );
-    return rsp.data;
+    try {
+      const rsp = await require("axios").get(
+        `${this.Gateway}/ipns/${ipns}/planet.json`
+      );
+      return rsp.data;
+    } catch (ex) {
+      log.error("fail to fetch planet:", ex.message);
+    }
   }
 
   async addDirectory(dir) {
