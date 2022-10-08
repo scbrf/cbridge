@@ -14,6 +14,8 @@ new CronJob(
   "America/Los_Angeles"
 );
 
+const log = require("./log")("cron");
+
 async function updateIPNS(p) {
   log.info("update comments content ...");
   const planet = await require("./ipfs").getPlanet(p.key);
