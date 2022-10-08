@@ -32,7 +32,7 @@ async function main() {
   app.use(logger);
   router.get("/register", async (ctx) => {
     const { ipns, ce } = ctx.request.query;
-    if (!ipns || !ce) return ctx.status(404);
+    if (!ipns || !ce) return (ctx.status = 404);
     const rec = require("./model").exists(ipns);
     if (rec) {
       ctx.body = { ipns: rec.ipns };
@@ -40,8 +40,8 @@ async function main() {
     }
     const planet = await require("./ipfs").getPlanet(ipns);
     if (!planet || !planet.articles) {
-      log.error("fail to fetch planet.json");
-      return ctx.status(403);
+      log.error("fail to fetch planet.json", { ipns });
+      return (ctx.status = 403);
     }
     const result = await require("./ipfs").generateKey(ipns);
     require("./model").add({ key: ipns, entry: ce, ipns: result });
