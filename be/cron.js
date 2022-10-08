@@ -37,7 +37,7 @@ async function updateIPNS(p) {
       return;
     }
     const commentsPath = require("path").join(planetRoot, `${article.id}.json`);
-    const url = `${p.ce}/${p.key}/${article.id}`;
+    const url = `${p.entry}/${p.key}/${article.id}`;
     log.info(`fetch comments content of article from url ${url} ...`);
     try {
       const comments = await require("axios").get(url);
