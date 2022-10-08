@@ -1,5 +1,6 @@
 require("./cron");
 const Koa = require("koa");
+const { updateIPNS } = require("./cron");
 const log = require("./log")("main");
 
 async function logger(ctx, next) {
@@ -51,7 +52,9 @@ async function main() {
       log.error("genurate fail with reason", ex.message);
       try {
         result = await require("./ipfs").listKey(ipns);
-        require("./model").add({ key: ipns, entry: ce, ipns: result });
+        const p = { key: ipns, entry: ce, ipns: result };
+        require("./model").add(p);
+        await updateIPNS(p);
       } catch (e2) {
         log.error("list fail with reason", e2.message);
         return (ctx.status = 403);
