@@ -15,6 +15,7 @@ new CronJob(
 );
 
 async function updateIPNS(p) {
+  log.info("update comments content ...");
   const planet = await require("./ipfs").getPlanet(p.key);
   if (!planet.articles || !planet.articles.length) {
     log.error(`ipns ${planet.key} may have bad content, no article!`);
@@ -34,12 +35,17 @@ async function updateIPNS(p) {
       return;
     }
     const commentsPath = require("path").join(planetRoot, `${article.id}.json`);
-    const comments = await require("axios").get(
-      `${p.ce}/${p.key}/${article.id}`
-    );
-    require("fs").writeFileSync(commentsPath, JSON.stringify(comments.data));
+    const url = `${p.ce}/${p.key}/${article.id}`;
+    log.info(`fetch comments content of article from url ${url} ...`);
+    try {
+      const comments = await require("axios").get(url);
+      require("fs").writeFileSync(commentsPath, JSON.stringify(comments.data));
+    } catch (ex) {
+      log.error("fetch comments fail", { url, ex });
+    }
   }
   const cid = await require("./ipfs").addDirectory(planetRoot);
+  log.info("got cid for planets", { key: p.key, cid });
   require("./ipfs").publish(p.key, cid);
 }
 
