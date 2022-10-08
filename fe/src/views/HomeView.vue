@@ -48,7 +48,7 @@ export default {
       ipns: '',
       isLoading: false,
       error: '',
-      cib: 'k51qzi5uqu5dkav246x3oyur00nq5vyh2we5707mft3l8p7e90muaxz6ijviyp'
+      cib: ''
     }
   },
   computed: {
