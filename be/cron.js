@@ -42,5 +42,3 @@ async function updateIPNS(p) {
   const cid = await require("./ipfs").addDirectory(planetRoot);
   require("./ipfs").publish(p.key, cid);
 }
-
-updateIPNS(require("./model").data.planets[0]);
