@@ -31,15 +31,20 @@ async function main() {
   app.use(bodyParser());
   app.use(logger);
   router.get("/register", async (ctx) => {
-    const { ipns } = ctx.request.query;
-    if (!ipns) return ctx.status(404);
+    const { ipns, ce } = ctx.request.query;
+    if (!ipns || !ce) return ctx.status(404);
+    const rec = require("./model").exists(ipns);
+    if (rec) {
+      ctx.body = { ipns: rec.ipns };
+      return;
+    }
     const planet = await require("./ipfs").getPlanet(ipns);
     if (!planet || !planet.articles) {
       log.error("fail to fetch planet.json");
       return ctx.status(403);
     }
     const result = await require("./ipfs").generateKey(ipns);
-    require("./model").add({ key: ipns });
+    require("./model").add({ key: ipns, entry: ce, ipns: result });
     ctx.body = { ipns: result };
   });
   app.use(router.routes()).use(router.allowedMethods());

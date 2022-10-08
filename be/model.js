@@ -24,8 +24,15 @@ class Storage {
     });
   }
 
+  exists(ipns) {
+    return this.data.planets.filter((p) => p.key === ipns)[0];
+  }
+
   add(planet) {
-    this.data.planets.push(planet);
+    this.data.planets = [
+      ...this.data.planets.filter((p) => p.key !== planet.key),
+      planet,
+    ];
     this.assignDelay();
     require("fs").writeFileSync(this.jsonPath, JSON.stringify(this.data));
   }

@@ -14,8 +14,6 @@ new CronJob(
   "America/Los_Angeles"
 );
 
-const COMMENT_BASE = "https://comments.scbrf.workers.dev";
-
 async function updateIPNS(p) {
   const planet = await require("./ipfs").getPlanet(p.key);
   if (!planet.articles || !planet.articles.length) {
@@ -37,7 +35,7 @@ async function updateIPNS(p) {
     }
     const commentsPath = require("path").join(planetRoot, `${article.id}.json`);
     const comments = await require("axios").get(
-      `${COMMENT_BASE}/${p.key}/${article.id}`
+      `${p.ce}/${p.key}/${article.id}`
     );
     require("fs").writeFileSync(commentsPath, JSON.stringify(comments.data));
   }
