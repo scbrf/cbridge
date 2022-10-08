@@ -43,8 +43,20 @@ async function main() {
       log.error("fail to fetch planet.json", { ipns });
       return (ctx.status = 403);
     }
-    const result = await require("./ipfs").generateKey(ipns);
-    require("./model").add({ key: ipns, entry: ce, ipns: result });
+    let result;
+    try {
+      result = await require("./ipfs").generateKey(ipns);
+      require("./model").add({ key: ipns, entry: ce, ipns: result });
+    } catch (ex) {
+      log.error("genurate fail with reason", ex.message);
+      try {
+        result = await require("./ipfs").listKey(ipns);
+        require("./model").add({ key: ipns, entry: ce, ipns: result });
+      } catch (e2) {
+        log.error("list fail with reason", e2.message);
+        return (ctx.status = 403);
+      }
+    }
     ctx.body = { ipns: result };
   });
   app.use(router.routes()).use(router.allowedMethods());

@@ -11,6 +11,13 @@ class IPFS {
     return rsp.trim();
   }
 
+  async listKey(id) {
+    log.info(`list IPFS keypair for ${id}`);
+    const rsp = await this.runIPFSCmd("key", "list", "--encoding=json");
+    const key = JSON.parse(rsp.trim()).Keys.filter((key) => key.Name === id)[0];
+    return key && key.Id;
+  }
+
   async getPlanet(ipns) {
     try {
       const rsp = await require("axios").get(
