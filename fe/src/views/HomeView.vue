@@ -17,8 +17,11 @@
               class="input flex-1 input-sm input-bordered" />
           </label>
 
-          <button :disabled="!validated" @click="getCommentIPNS" class="btn btn-outline mt-4 btn-sm ">获取 Bridge
+          <button :disabled="!validated" :class="isLoading ? ['loading']: []" @click="getCommentIPNS"
+            class="btn btn-outline mt-4 btn-sm ">获取 Bridge
             IPNS</button>
+
+          <span class="font-bold text-sm text-red-600 my-4 self-center">{{error}}</span>
         </div>
       </div>
       <div class="flex-1">
@@ -36,6 +39,7 @@ export default {
       ce: 'https://comments.scbrf.workers.dev',
       ipns: '',
       isLoading: false,
+      error: ''
     }
   },
   computed: {
@@ -46,13 +50,19 @@ export default {
   methods: {
     async getCommentIPNS() {
       this.isLoading = true
-      const rsp = await axios.get(`https://cib.qiangge.lift/register`, {
-        params: {
-          ipns: this.ipns,
-          ce: this.ce
-        }
-      })
-      console.log(rsp.data)
+      this.error = ''
+      try {
+        const rsp = await axios.get(`https://cib.qiangge.life/register`, {
+          params: {
+            ipns: this.ipns,
+            ce: this.ce
+          }
+        })
+        console.log(rsp.data)
+      } catch (ex) {
+        console.log('error fetch', ex)
+        this.error = ex.message
+      }
       this.isLoading = false
     }
   }
