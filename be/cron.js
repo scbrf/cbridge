@@ -28,9 +28,10 @@ async function updateIPNS(p) {
     "planets",
     p.key
   );
-  if (!require("fs").existsSync(planetRoot)) {
-    require("fs").mkdirSync(planetRoot, { recursive: true });
+  if (require("fs").existsSync(planetRoot)) {
+    require("fs").rmSync(planetRoot, { recursive: true, force: true });
   }
+  require("fs").mkdirSync(planetRoot, { recursive: true });
   for (let article of planet.articles) {
     if (!article.id) {
       log.error(`ipns ${planet.key} may have bad content, no id!`);
