@@ -19,7 +19,7 @@ const log = require("./log")("cron");
 async function updateIPNS(p) {
   log.info("update comments content ...");
   const planet = await require("./ipfs").getPlanet(p.key);
-  if (!planet.articles || !planet.articles.length) {
+  if (!planet || !planet.articles || !planet.articles.length) {
     log.error(`ipns ${planet.key} may have bad content, no article!`);
     return;
   }
